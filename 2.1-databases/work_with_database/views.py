@@ -1,10 +1,25 @@
 from django.shortcuts import render
 from phones.models import Phone
 
-def phone_list(request):
-    phones = Phone.objects.all()
-    return render(request, 'phone_list.html', {'phones': phones})
+def show_catalog(request):
+    template = 'catalog.html'
+    sort_pages = request.GET.get('sort')
+    phones_objects = Phone.objects.all()
 
-def phone_detail(request, slug):
+    if sort_pages == 'max_price':
+        phones_objects = phones_objects.order_by('price').reverse()
+    elif sort_pages == 'min_price':
+        phones_objects = phones_objects.order_by('price')
+    elif sort_pages == 'name':
+        phones_objects = phones_objects.order_by('name')
+
+    context = {'phones': phones_objects,
+               }
+    return render(request, template, context=context)
+
+
+def show_product(request, slug):
+    template = 'product.html'
     phone = Phone.objects.get(slug=slug)
-    return render(request, 'phone_detail.html', {'phone': phone})
+    context = {'phone': phone}
+    return render(request, template, context=context)
