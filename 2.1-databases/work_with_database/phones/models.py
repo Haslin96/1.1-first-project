@@ -1,19 +1,21 @@
 from django.db import models
-from django.utils.text import slugify
+
 
 class Phone(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=100)
+    # TODO: Добавьте требуемые поля
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=50)
+    price = models.IntegerField()
     image = models.URLField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    release_date = models.DateField()
+    release_date = models.DateTimeField()
     lte_exists = models.BooleanField()
-    slug = models.SlugField(unique=True, blank=True)
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)
-        super(Phone, self).save(*args, **kwargs)
+    slug = models.SlugField()
 
     def __str__(self):
-        return self.name
+        return f"{self.id};" \
+               f" {self.name};" \
+               f" {self.price};" \
+               f" {self.image};" \
+               f" {self.release_date};" \
+               f" {self.lte_exists};" \
+               f" {self.slug}"
